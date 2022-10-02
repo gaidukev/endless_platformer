@@ -11,7 +11,7 @@ export const getPipeSizePosPair = (addToPosX = 0) => {
     let jumpDuck = getRandom(0,3);
     let yPosTop = 0;
     if (jumpDuck <= 1) {
-        yPosTop = -60;
+        yPosTop = -100;
     } else { 
         yPosTop = -250;
     }
