@@ -43,7 +43,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
 
 
     Matter.Events.on(engine, 'collisionStart', (event) => {
-        dispatch({ type: 'game_over' })
+        if (!(event.pairs.some(pair => {return (pair.bodyA.label === 'Bird' && pair.bodyB.label ==='Floor') || (pair.bodyA.label === 'Floor' && pair.bodyB.label ==='Bird')}))) {
+        		dispatch({ type: 'game_over' })
+		}
     })
     return entities;
 }
