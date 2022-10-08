@@ -7,30 +7,34 @@ const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 
 const Physics = (entities, { touches, time, dispatch }) => {
+  let prevTouchDown = false;
   let engine = entities.physics.engine;
+  let birdHeight =
+    entities.Bird.body.bounds.max.y - entities.Bird.body.bounds.min.y;
 
   touches
     .filter((t) => {
-      if (t.type === "move" && t.delta.pageY > 5) {
-        console.log("MOVE DOWN");
-      } else if (t.type === "move" && t.delta.pageY < -5) {
-        console.log("MOVE UP");
-      }
-
       {
         return (
-          (t.type === "move" && t.delta.pageY > 5) ||
-          (t.type === "move" && t.delta.pageY < -5)
+          (t.type === "move" && t.delta.pageY > 15) ||
+          (t.type === "move" && t.delta.pageY < -15) ||
+          (t.type == "end" && birdHeight < 40)
         );
-        //return t.type === "press" || (t.type=== "move" && t.delta.pageY > 5) || (t.type === "move" && t.delta.pageY < -5);
       }
     })
     .forEach((t) => {
-      if (t.delta.pageY < -30) {
+      if (t.type == "end") {
+        Matter.Body.scale(entities.Bird.body, 1, 2);
+      } else if (t.delta.pageY < -15 && entities.Bird.body.bounds.min.y > 600) {
+        // console.log(entities.Bird.body.bounds.max.y);
+        // console.log(entities.Bird.body.bounds.min.y);
         Matter.Body.setVelocity(entities.Bird.body, {
           x: 0,
           y: -8,
         });
+        //console.log(entities.Bird.body.bounds);
+      } else if (t.delta.pageY > 15 && birdHeight > 40) {
+        Matter.Body.scale(entities.Bird.body, 1, 0.5);
       }
     });
 
